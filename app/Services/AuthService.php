@@ -8,7 +8,6 @@ use App\Utils\BaseResponse;
 use App\Utils\BusinessException;
 use App\Utils\CommonUtil;
 use App\Utils\Constants;
-use App\Utils\Monologger;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -38,7 +37,7 @@ class AuthService
             'phone_number' => 'required|min:6|unique:users',
         ]);
         if ($validate->fails()) {
-            throw new BusinessException(Constants::HTTP_CODE_422, $validate->errors(), Constants::ERROR_CODE_9000, $request->auth['request_id']);
+            throw new BusinessException(Constants::HTTP_CODE_422, $validate->errors(), Constants::ERROR_CODE_90);
         }
 
         // Validate password strength
@@ -47,7 +46,7 @@ class AuthService
         $number = preg_match('@[0-9]@', $request->password);
         $specialChars = preg_match('@[^\w]@', $request->password);
         if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($request->password) < 6) {
-            throw new BusinessException(Constants::HTTP_CODE_409, 'Password should be at least 6 characters in length and should include at least one upper case letter, one number, and one special character.', Constants::ERROR_CODE_9000);
+            throw new BusinessException(Constants::HTTP_CODE_409, 'Password should be at least 6 characters in length and should include at least one upper case letter, one number, and one special character.', Constants::ERROR_CODE_90);
         }
 
         //Create new user
@@ -58,20 +57,15 @@ class AuthService
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->status = Constants::ACTIVE;
-            $user->company_id = $request->company_id;
-            $user->branch_id = $request->branch_id;
-            $user->coordinate = $request->coordinate;
             $user->phone_number = CommonUtil::phoneNumber($request->phone_number);
             $this->userRepository->create($user->toArray());
         } catch (\Exception $ex) {
-            Monologger::log(Constants::ERROR, $ex->getMessage(), $request->get('auth')['request_id']);
-            throw new BusinessException(Constants::HTTP_CODE_409, $ex->getMessage(), Constants::ERROR_CODE_9000, $request->auth['request_id']);
+            throw new BusinessException(Constants::HTTP_CODE_409, $ex->getMessage(), Constants::ERROR_CODE_90);
         }
 
         return BaseResponse::statusResponse(
             Constants::HTTP_CODE_200,
-            Constants::HTTP_MESSAGE_200,
-            $request->auth['request_id']
+            Constants::HTTP_MESSAGE_200
         );
     }
 
@@ -136,14 +130,13 @@ class AuthService
         }
 
         if (!$token = auth()->setTTL($ttl)->attempt($credentials->toArray())) {
-            throw new BusinessException(Constants::HTTP_CODE_409, 'Invalid username or password', Constants::ERROR_CODE_9001, $request->auth['request_id']);
+            throw new BusinessException(Constants::HTTP_CODE_409, 'Invalid username or password', Constants::ERROR_CODE_91);
         }
 
         return BaseResponse::buildResponse(
             Constants::HTTP_CODE_200,
             Constants::HTTP_MESSAGE_200,
-            $this->respondWithToken($token),
-            $request->auth['request_id']
+            $this->respondWithToken($token)
         );
     }
 }

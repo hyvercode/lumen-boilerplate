@@ -37,8 +37,7 @@ class RoleService
         return BaseResponse::buildResponse(
             Constants::HTTP_CODE_200,
             Constants::HTTP_MESSAGE_200,
-            $this->roleRepository->paginate($request->searchBy, $request->searchParam, $request->limit, ['*'], 'page', $request->page),
-            $request->auth['request_id']
+            $this->roleRepository->paginate($request->searchBy, $request->searchParam, $request->limit, ['*'], 'page', $request->page)
         );
     }
 }

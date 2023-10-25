@@ -34,10 +34,9 @@ class BaseResponse
      * @param array $data
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function buildResponse(int $code = Constants::HTTP_CODE_404, string $status = Constants::ERROR_MESSAGE_404, $data = [], string $request_id = null)
+    public static function buildResponse(int $code = Constants::HTTP_CODE_404, string $status = Constants::ERROR_MESSAGE_404, $data = [])
     {
         return response()->json(array(
-                'request_id' => $request_id,
                 'code' => $code,
                 'status' => $status,
                 'data' => $data,
@@ -51,10 +50,9 @@ class BaseResponse
      * @param string $status
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function statusResponse(int $code = Constants::HTTP_CODE_404, string $status = Constants::ERROR_MESSAGE_404, string $request_id = null)
+    public static function statusResponse(int $code = Constants::HTTP_CODE_404, string $status = Constants::ERROR_MESSAGE_404)
     {
         return response()->json(array(
-                'request_id' => $request_id,
                 'code' => $code,
                 'status' => $status,
                 'time_stamp' => DateTimeConverter::getDateTimeNow(),

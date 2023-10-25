@@ -20,7 +20,8 @@
         "jacobcyl/ali-oss-storage": "2.1",
         "intervention/image": "^2.6",
         "league/flysystem-sftp": "^1.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
