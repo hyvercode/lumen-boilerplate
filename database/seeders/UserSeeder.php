@@ -22,14 +22,8 @@ class UserSeeder extends Seeder
             "email" => "admin@homestead.com",
             "password" => Hash::make("Admin!23"),
             "phone_number" => "628788587000",
-            "company_id" => 1,
-            "branch_id" => 1,
-            "api_roles" => Constants::ADMIN,
-            "status" => Constants::ACTIVE,
-            "coordinate" => "429840288284",
-            "fcm_token" => "oiurowqrnqjfnqhro",
+            "status" => Constants::ACTIVE
         ]);
-
         $admin->assignRole('admin');
     }
 }

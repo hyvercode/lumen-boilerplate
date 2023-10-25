@@ -30,7 +30,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'id','name', 'username', 'email', 'password', 'api_roles', 'status', 'branch_id', 'company_id', 'phone_number', 'employee_id', 'coordinate', 'fcm_token', 'created_at', 'created_by', 'updated_at', 'updated_by','avatar'
+        'id','name', 'username', 'email', 'password','status','phone_number','created_at', 'created_by', 'updated_at', 'updated_by','avatar'
     ];
 
     /**
@@ -56,12 +56,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getJWTCustomClaims()
     {
         return [
-            "scope" => $this->api_roles,
-            "company" => $this->company_id,
-            "employee" => $this->employee_id,
-            "branch" => $this->branch_id,
             "roles" => $this->menu_roles,
-            "api_roles" => $this->api_roles,
             "avatar" => $this->avatar,
             "name" => $this->name,
             "login_id" => CommonUtil::generateUUID()
@@ -70,7 +65,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $guard_name = 'api';
     protected $guarded = [];
-    protected $attributes = [
-        'menu_roles' => 'user',
-    ];
 }
